@@ -1,4 +1,5 @@
-from rest_framework import viewsets
+from django.http import Http404
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -29,6 +30,22 @@ class CategoryViewSet(viewsets.ViewSet):
         serializer = FoodCategorySerializer(new_category)
         return Response(serializer.data)
 
+    def destroy(self, request, pk):
+        try:
+            instance = FoodCategory.objects.get(id=pk)
+            instance.delete()
+        except Http404:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['PUT'], detail=False, permission_classes=(IsAuthenticated, ))
+    def update(self, request, pk):
+        category = FoodCategory.objects.get(id=pk)
+        category.category_name = request.data['category_name']
+        category.save()
+        serializer = FoodCategorySerializer(category)
+        return Response(serializer.data)
+
 
 class FoodViewSet(viewsets.ViewSet):
     permission_classes = (IsAuthenticated, )
@@ -52,4 +69,29 @@ class FoodViewSet(viewsets.ViewSet):
                                            description=food_data['description'], category=category)
         new_food.save()
         serializer = FoodItemSerializer(new_food)
+        return Response(serializer.data)
+
+    def destroy(self, request, pk):
+        try:
+            instance = FoodItem.objects.get(id=pk)
+            instance.delete()
+        except Http404:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def select(self, request, pk=None):
+        queryset = FoodItem.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = FoodItemSerializer(user)
+        return Response(serializer.data)
+
+    def update(self, request, pk):
+        food_item = FoodItem.objects.get(id=pk)
+        food_item.item_name = request.data['item_name']
+        food_item.price = request.data['price']
+        food_item.description = request.data['description']
+        category = FoodCategory.objects.get(category_name=request.data['category'])
+        food_item.category = category
+        food_item.save()
+        serializer = FoodItemSerializer(food_item)
         return Response(serializer.data)

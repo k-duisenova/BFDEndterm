@@ -27,11 +27,22 @@ class Admin(User):
         verbose_name_plural = 'админы'
 
 
+class FoodCategoryManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().order_by('category_name')
+
+
 class FoodCategory(models.Model):
     category_name = models.CharField(max_length=100)
+    categories = FoodCategoryManager()
 
     def __str__(self):
         return self.category_name
+
+
+class FoodManager(models.Manager):
+    def get_by_category_without_relation(self, category_name):
+        return self.filter(category=category_name)
 
 
 class FoodItem(models.Model):
@@ -39,6 +50,7 @@ class FoodItem(models.Model):
     price = models.FloatField()
     description = models.CharField(max_length=255, blank=True)
     category = models.ForeignKey(FoodCategory, on_delete=models.RESTRICT, related_name='foods')
+    food_items = FoodManager()
 
     def __str__(self):
         return self.item_name
