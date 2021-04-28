@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FoodCategory, FoodItem
+from .models import FoodCategory, FoodItem, CreditCard, ShoppingCart, Order
 
 
 class FoodCategorySerializer(serializers.Serializer):
@@ -16,7 +16,7 @@ class FoodCategorySerializer(serializers.Serializer):
 
     def validate(self, data):
         if data['categoryName'] == '':
-            raise serializers.ValidationError("category name should be written!")
+            raise serializers.ValidationError("Category name should be written!")
         return data
 
 
@@ -43,6 +43,29 @@ class FoodItemSerializer(serializers.Serializer):
         return instance
 
     def validate(self, data):
-        if data['price'] < 0:
-            raise serializers.ValidationError("price can't be negative number!")
+        if data['price'] <= 0:
+            raise serializers.ValidationError("Price can't be negative number or zero!")
         return data
+
+
+class CreditCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditCard
+        fields = '__all__'
+
+    def validate_number(self, value):
+        if '-' in value:
+            raise serializers.ValidationError('Invalid chars!')
+        return value
+
+
+class ShoppingCartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShoppingCart
+        fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'

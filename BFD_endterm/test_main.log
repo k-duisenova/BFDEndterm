@@ -1,0 +1,21 @@
+INFO -- 2021-04-27 18:54:45,573: Category object created, ID: Nuts
+INFO -- 2021-04-27 18:56:08,698: Category object created, ID: Plant-based milk
+INFO -- 2021-04-27 18:56:48,892: Category object created, ID: Soya
+INFO -- 2021-04-27 22:24:26,480: Category object created, ID: Almond milk
+INFO -- 2021-04-27 22:33:48,048: Category object created, ID: Chocolate
+INFO -- 2021-04-27 23:08:43,112: ShoppingCart object created, ID: ShoppingCart object (2)
+INFO -- 2021-04-27 23:09:10,880: ShoppingCart object updated, ID: ShoppingCart object (2)
+INFO -- 2021-04-27 23:26:29,226: Order object created, ID: Order object (2)
+INFO -- 2021-04-28 00:00:03,195: FoodItem object created, ID: Rahat 80%
+INFO -- 2021-04-28 00:06:53,725: FoodItem object created, ID: Rahat 70%
+INFO -- 2021-04-28 00:25:28,553: ShoppingCart object updated, ID: ShoppingCart object (2)
+INFO -- 2021-04-28 00:27:58,814: Order object deleted
+ERROR -- 2021-04-28 00:28:13,297: Order object cannot be created, {'cart_items': [ErrorDetail(string='Invalid pk "3" - object does not exist.', code='does_not_exist')]}
+ERROR -- 2021-04-28 00:28:29,155: Order object cannot be created, {'cart_items': [ErrorDetail(string='Invalid pk "4" - object does not exist.', code='does_not_exist')]}
+INFO -- 2021-04-28 00:28:40,102: Order object created, ID: Order object (3)
+INFO -- 2021-04-28 00:35:22,110: CreditCard object created, ID: 5720493256789012
+ERROR -- 2021-04-28 00:35:44,093: CreditCard object is not created, ID: {'number': [ErrorDetail(string='Ensure this field has no more than 16 characters.', code='max_length')]}
+INFO -- 2021-04-28 00:35:53,594: CreditCard object created, ID: 57204-9326789012
+ERROR -- 2021-04-28 00:37:18,867: CreditCard object is not created, ID: {'number': [ErrorDetail(string='Invalid chars!', code='invalid')], 'customer': [ErrorDetail(string='Invalid pk "10" - object does not exist.', code='does_not_exist')]}
+ERROR -- 2021-04-28 00:37:29,810: CreditCard object is not created, ID: {'number': [ErrorDetail(string='Invalid chars!', code='invalid')]}
+INFO -- 2021-04-28 00:37:34,172: CreditCard object created, ID: 12345678

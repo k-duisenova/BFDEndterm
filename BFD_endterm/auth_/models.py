@@ -3,6 +3,9 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from utils.upload import user_avatar_directory_path
+from utils.validators import validate_size, validate_extension
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -47,3 +50,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+
+class Profile(models.Model):
+    bio = models.TextField(max_length=500, blank=True)
+    location = models.CharField(max_length=30, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars', validators=[validate_size, validate_extension],
+                               null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'

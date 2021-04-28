@@ -1,30 +1,6 @@
 from django.db import models
-#
-#
-# class User(models.Model):
-#     login = models.CharField(max_length=255)
-#     password = models.CharField(max_length=30)
-#     name = models.CharField(max_length=200)
-#     address = models.CharField(max_length=255)
-#     phone = models.CharField(max_length=20)
-#     email = models.EmailField()
-#
-#     def __str__(self):
-#         return self.name + self.email
-#
-#     class Meta:
-#         verbose_name = 'Пользователь'
-#         ordering = ('id', 'name')
-#
-#
-# class Admin(User):
-#
-#     def __str__(self):
-#         return self.name + self.login
-#
-#     class Meta:
-#         verbose_name = 'админ'
-#         verbose_name_plural = 'админы'
+from auth_.models import User
+from utils.validators import validate_size, validate_extension
 
 
 class FoodCategoryManager(models.Manager):
@@ -34,7 +10,11 @@ class FoodCategoryManager(models.Manager):
 
 class FoodCategory(models.Model):
     category_name = models.CharField(max_length=100)
-    categories = FoodCategoryManager()
+    objects = FoodCategoryManager()
+
+    class Meta:
+        verbose_name = 'Категория продуктов'
+        verbose_name_plural = 'Категории продуктов'
 
     def __str__(self):
         return self.category_name
@@ -50,10 +30,49 @@ class FoodItem(models.Model):
     price = models.FloatField()
     description = models.CharField(max_length=255, blank=True)
     category = models.ForeignKey(FoodCategory, on_delete=models.RESTRICT, related_name='foods')
-    food_items = FoodManager()
+    photo = models.ImageField(upload_to='food_item_photos',
+                              validators=[validate_size, validate_extension],
+                              null=True, blank=True)
+    objects = models.Manager()
 
     def __str__(self):
         return self.item_name
 
     class Meta:
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
         ordering = ('item_name', 'price')
+
+
+class CreditCard(models.Model):
+    number = models.CharField(max_length=16, blank=True)
+    expireDate = models.CharField(max_length=50, blank=True)
+    code = models.CharField(max_length=3, blank=True)
+    customer = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Кредитная карта'
+        verbose_name_plural = 'Кредитные карты'
+
+    def __str__(self):
+        return self.number
+
+
+class ShoppingCart(models.Model):
+    cart_items = models.ManyToManyField(FoodItem)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
+
+
+class Order(models.Model):
+    price = models.FloatField()
+    delivery_address = models.CharField(max_length=255)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    cart_items = models.ManyToManyField(ShoppingCart)
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'

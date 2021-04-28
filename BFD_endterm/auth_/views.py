@@ -1,9 +1,13 @@
+import logging
+
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from auth_.models import User
 from auth_.serializers import UserSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class UserSignup(viewsets.ViewSet):
@@ -17,6 +21,9 @@ class UserSignup(viewsets.ViewSet):
             new_user.set_password(user_data['password'])
             new_user.save()
             serializer = UserSerializer(new_user)
+            logger.debug(f'New user signed up, ID: {serializer.instance}')
+            logger.info(f'New user signed up, ID: {serializer.instance}')
+            logger.debug(f'New profile is created, ID: {serializer.instance}')
             return Response(serializer.data)
 
     @action(methods=['POST'], detail=False, permissions=(IsAdminUser,))
@@ -29,4 +36,6 @@ class UserSignup(viewsets.ViewSet):
                                            is_staff=True)
             new_user.save()
             serializer = UserSerializer(new_user)
+            logger.debug(f'New manager is created, ID: {serializer.instance}')
+            logger.info(f'New manager is created, ID: {serializer.instance}')
             return Response(serializer.data)
