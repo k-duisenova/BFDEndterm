@@ -4,5 +4,6 @@ from .views import UserSignup
 
 urlpatterns = [
     path('login', obtain_jwt_token),
-    path('signup', UserSignup.as_view({'post': 'signup'}))
+    path('signup', UserSignup.as_view({'post': 'signup'})),
+    path('managers/signup', UserSignup.as_view({'post': 'create_manager'}))
 ]

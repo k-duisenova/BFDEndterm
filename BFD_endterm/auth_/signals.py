@@ -1,3 +1,5 @@
+import logging
+
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from auth_.models import User, Profile
@@ -11,9 +13,14 @@ def user_created(sender, instance, created, **kwargs):
         CreditCard.objects.create(customer=instance)
 
 
+logger = logging.getLogger(__name__)
+
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+    logger.debug(f'New profile is created, ID: {instance}')
+    logger.info(f'New profile is created, ID: {instance}')
 
 
 @receiver(post_save, sender=Order)

@@ -2,8 +2,6 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
-from utils.upload import user_avatar_directory_path
 from utils.validators import validate_size, validate_extension
 
 
