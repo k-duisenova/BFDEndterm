@@ -3,6 +3,7 @@ from .models import FoodCategory, FoodItem, CreditCard, ShoppingCart, Order
 
 
 class FoodCategorySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     category_name = serializers.CharField()
 
     def create(self, validated_data):
@@ -27,7 +28,7 @@ class FoodItemSerializer(serializers.Serializer):
     category = FoodCategorySerializer()
 
     def create(self, validated_data):
-        category = FoodCategory.objects.get(category_name=validated_data.get('category')).id
+        category = FoodCategory.objects.get(id=validated_data.get('category'))
         foodItem = FoodItem.objects.create(item_name=validated_data.get('item_name'),
                                            price=validated_data.get('price'),
                                            description=validated_data.get('description'),

@@ -77,7 +77,7 @@ class FoodViewSet(viewsets.ViewSet):
     @action(methods=['POST'], detail=False, permission_classes=(IsAdminUser,))
     def create(self, request):
         food_data = request.data
-        category = FoodCategory.objects.get(category_name=food_data['category'])
+        category = FoodCategory.objects.get(id=food_data['category'])
         new_food = FoodItem.objects.create(item_name=food_data['item_name'], price=food_data['price'],
                                            description=food_data['description'], category=category)
         new_food.save()
